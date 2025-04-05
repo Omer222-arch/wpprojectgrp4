@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Review System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .rating {
+            display: flex;
+            gap: 10px;
+        }
+        .rating input {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Faculty Review Form</h1>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="facultyName">Faculty Name:</label>
+                <input type="text" id="facultyName" name="facultyName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="course">Course:</label>
+                <input type="text" id="course" name="course" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Teaching Quality:</label>
+                <div class="rating">
+                    <label><input type="radio" name="teachingQuality" value="5" required> Excellent</label>
+                    <label><input type="radio" name="teachingQuality" value="4"> Good</label>
+                    <label><input type="radio" name="teachingQuality" value="3"> Average</label>
+                    <label><input type="radio" name="teachingQuality" value="2"> Poor</label>
+                    <label><input type="radio" name="teachingQuality" value="1"> Very Poor</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Communication Skills:</label>
+                <div class="rating">
+                    <label><input type="radio" name="communication" value="5" required> Excellent</label>
+                    <label><input type="radio" name="communication" value="4"> Good</label>
+                    <label><input type="radio" name="communication" value="3"> Average</label>
+                    <label><input type="radio" name="communication" value="2"> Poor</label>
+                    <label><input type="radio" name="communication" value="1"> Very Poor</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="comments">Additional Comments:</label>
+                <textarea id="comments" name="comments"></textarea>
+            </div>
+            
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                facultyName: document.getElementById('facultyName').value,
+                course: document.getElementById('course').value,
+                teachingQuality: document.querySelector('input[name="teachingQuality"]:checked').value,
+                communication: document.querySelector('input[name="communication"]:checked').value,
+                comments: document.getElementById('comments').value
+            };
+
+            try {
+                const response = await fetch('/submit-feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Thank you for your feedback!');
+                    document.getElementById('feedbackForm').reset();
+                } else {
+                    alert('Error submitting feedback. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting feedback. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html> 
